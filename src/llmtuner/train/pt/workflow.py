@@ -17,6 +17,16 @@ if TYPE_CHECKING:
 
     from ...hparams import DataArguments, FinetuningArguments, ModelArguments
 
+"""
+主要功能是运行预训练（pre-training）阶段的模型训练和评估。
+"""
+
+"""
+定义了一个名为run_pt的函数，该函数接收五个参数：
+    model_args、data_args、training_args、finetuning_args和callbacks。
+
+    这些参数分别代表模型参数、数据参数、训练参数、微调参数和回调函数列表。
+"""
 
 def run_pt(
     model_args: "ModelArguments",

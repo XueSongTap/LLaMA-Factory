@@ -21,7 +21,15 @@ if TYPE_CHECKING:
 
 logger = get_logger(__name__)
 
+"""
+run_exp函数是主要的实验运行函数，它接收两个可选参数：args和callbacks。
+    args是一个字典，包含了模型、数据、训练、微调和生成的参数。callbacks是一个TrainerCallback对象的列表，
 
+这些对象在训练过程中被调用以执行特定的任务。函数首先通过get_train_args函数获取一些参数，然后根据finetuning_args.stage的值决定调用哪个函数。
+
+例如，如果finetuning_args.stage的值为"pt"，则会调用run_pt函数。
+
+"""
 def run_exp(args: Optional[Dict[str, Any]] = None, callbacks: Optional[List["TrainerCallback"]] = None):
     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
     callbacks = [LogCallback()] if callbacks is None else callbacks
@@ -38,7 +46,12 @@ def run_exp(args: Optional[Dict[str, Any]] = None, callbacks: Optional[List["Tra
         run_dpo(model_args, data_args, training_args, finetuning_args, callbacks)
     else:
         raise ValueError("Unknown task.")
-
+"""
+export_model函数用于导出模型。
+    它首先通过get_infer_args函数获取一些参数，然后加载模型和tokenizer，修复tokenizer，并检查模型是否为PreTrainedModel。
+    
+    如果模型没有被量化，它会将模型的参数转换为指定的数据类型。最后，它会将模型和tokenizer保存到指定的目录，并尝试将它们推送到Hugging Face Hub。
+"""
 
 def export_model(args: Optional[Dict[str, Any]] = None):
     model_args, data_args, finetuning_args, _ = get_infer_args(args)
